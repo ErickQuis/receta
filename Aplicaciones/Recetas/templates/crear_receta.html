@@ -1,0 +1,143 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+{% load static %}
+<br>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h1 class="mb-4">Agregar Nueva Receta</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="/guardarreceta/" id="frm_nueva_receta" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Campo Nombre -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="txt_nombre" class="form-label"><b>Nombre:</b></label>
+                                <input type="text" class="form-control" name="txt_nombre" id="txt_nombre" placeholder="Ingrese el nombre de la receta" required>
+                            </div>
+                        </div>
+
+                        <!-- Campo Descripción -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="txt_descripcion" class="form-label"><b>Descripción:</b></label>
+                                <textarea class="form-control" name="txt_descripcion" id="txt_descripcion" rows="3" placeholder="Ingrese una descripción"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Campo Ingredientes -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="txt_ingredientes" class="form-label"><b>Ingredientes:</b></label>
+                                <textarea class="form-control" name="txt_ingredientes" id="txt_ingredientes" rows="5" placeholder="Ingrese los ingredientes" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Campo Instrucciones -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="txt_instrucciones" class="form-label"><b>Instrucciones:</b></label>
+                                <textarea class="form-control" name="txt_instrucciones" id="txt_instrucciones" rows="5" placeholder="Ingrese las instrucciones" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Campo Tiempo de Preparación -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="txt_tiempo_preparacion" class="form-label"><b>Tiempo de Preparación (minutos):</b></label>
+                                <input type="number" class="form-control" name="txt_tiempo_preparacion" id="txt_tiempo_preparacion" placeholder="Ingrese el tiempo en minutos" required>
+                            </div>
+                        </div>
+
+                        <!-- Campo Nivel de Dificultad -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="nivel_dificultad" class="form-label"><b>Nivel de Dificultad:</b></label>
+                                <select class="form-control" name="nivel_dificultad" id="nivel_dificultad" required>
+                                    <option value="">Seleccionar</option>
+                                    <option value="Fácil">Fácil</option>
+                                    <option value="Intermedio">Intermedio</option>
+                                    <option value="Difícil">Difícil</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Campo Imagen -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="imagen" class="form-label"><b>Imagen:</b></label>
+                                <input type="file" class="form-control" name="imagen" id="imagen" accept="image/*">
+                            </div>
+                        </div>
+
+                        <!-- Campo Es Favorita -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="es_favorita" class="form-label"><b>Es Favorita:</b></label>
+                                <select class="form-control" name="es_favorita" id="es_favorita" required>
+                                    <option value="False">No</option>
+                                    <option value="True">Sí</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Campo Es Fecha de creacion -->
+                        
+
+                        <!-- Botones -->
+                        <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                        <a href="/listado_receta/" class="btn btn-danger btn-block">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#frm_nueva_receta").validate({
+        rules: {
+            txt_nombre: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            },
+            txt_tiempo_preparacion: {
+                required: true,
+                number: true,
+                min: 1
+            },
+            nivel_dificultad: {
+                required: true
+            },
+            es_favorita: {
+                required: true
+            }
+        },
+        messages: {
+            txt_nombre: {
+                required: "Por favor, ingrese el nombre de la receta.",
+                minlength: "El nombre debe tener al menos 3 caracteres.",
+                maxlength: "El nombre no debe superar los 50 caracteres."
+            },
+            txt_tiempo_preparacion: {
+                required: "Por favor, ingrese el tiempo de preparación.",
+                number: "El tiempo debe ser un número válido.",
+                min: "El tiempo debe ser mayor a 0."
+            },
+            nivel_dificultad: {
+                required: "Por favor, seleccione el nivel de dificultad."
+            },
+            es_favorita: {
+                required: "Por favor, indique si es favorita."
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    
+
+
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header mb-5 position-relative overlay-bottom">
+        <div class="d-flex flex-column align-items-center justify-content-center pt-0 pt-lg-5" style="min-height: 400px">
+            <h1 class="display-4 mb-3 mt-0 mt-lg-5 text-white text-uppercase">Detalles</h1>
+            <div class="d-inline-flex mb-lg-5">
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- About Start -->
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="section-title">
+                <h1><b> 🥘{{ receta.nombre }}</h1></b>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 py-0 py-lg-5">
+                    <h1 class="mb-3">Ingredientes</h1>
+                    <h5 class="mb-3"> {{ receta.ingredientes }} </h5>
+                    <h1 class="mb-3">Descripcion</h1>
+                    <p>{{ receta.descripcion }}</p>
+                </div>
+                <div class="col-lg-4 py-5 py-lg-0" style="min-height: 500px;">
+                    <div class="position-relative h-100">
+                        <img class="position-absolute w-100 h-100" src="{{ receta.imagen.url }}" style="object-fit: cover;">
+                    </div>
+                </div>
+                <div class="col-lg-4 py-0 py-lg-5">
+                    <h1 class="mb-3">INSTRUCIONES</h1>
+                    <p>{{ receta.instrucciones }}</p>
+                    <br>
+                    <h5 class="mb-3"><i class="fa fa-check text-primary mr-3"></i>⏱️{{ receta.tiempo_preparacion }}</h5>
+                    <h5 class="mb-3"><i class="fa fa-check text-primary mr-3"></i>👤 {{ receta.nivel_dificultad }}</h5>
+                    <h5 class="mb-3"><i class="fa fa-check text-primary mr-3"></i>👩‍🍳 {{ receta.es_favorita|yesno:"Sí,No" }}</h5>
+                    <h5 class="mb-3"><i class="fa fa-check text-primary mr-3"></i>{{ receta.fecha_creacion }}</h5>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+
+
+
+
+</body>
+
+</html>
+{% endblock %}

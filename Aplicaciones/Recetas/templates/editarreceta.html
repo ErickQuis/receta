@@ -1,0 +1,75 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+{% load static %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h3>Editar Receta:</h3>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{% url 'editarreceta' receta.id %}" id="frm_editar_receta" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <label for="txt_id"><b>ID:</b></label>
+                        <input type="text" class="form-control" name="id" value="{{ receta.id }}" readonly>
+                        <br>
+
+                        <label for="txt_nombre"><b>Nombre:</b></label>
+                        <input type="text" class="form-control" name="txt_nombre" id="txt_nombre" value="{{ receta.nombre }}" required>
+                        <br>
+
+                        <label for="txt_descripcion"><b>Descripción:</b></label>
+                        <textarea class="form-control" name="txt_descripcion" id="txt_descripcion" rows="3">{{ receta.descripcion }}</textarea>
+                        <br>
+
+                        <label for="txt_ingredientes"><b>Ingredientes:</b></label>
+                        <textarea class="form-control" name="txt_ingredientes" id="txt_ingredientes" rows="5" required>{{ receta.ingredientes }}</textarea>
+                        <br>
+
+                        <label for="txt_instrucciones"><b>Instrucciones:</b></label>
+                        <textarea class="form-control" name="txt_instrucciones" id="txt_instrucciones" rows="5" required>{{ receta.instrucciones }}</textarea>
+                        <br>
+
+                        <label for="txt_tiempo_preparacion"><b>Tiempo de Preparación (minutos):</b></label>
+                        <input type="number" class="form-control" name="txt_tiempo_preparacion" id="txt_tiempo_preparacion" value="{{ receta.tiempo_preparacion }}" required>
+                        <br>
+
+                        <label for="nivel_dificultad"><b>Nivel de Dificultad:</b></label>
+                        <select class="form-control" name="nivel_dificultad" id="nivel_dificultad" required>
+                            <option value="Fácil" {% if receta.nivel_dificultad == 'Fácil' %}selected{% endif %}>Fácil</option>
+                            <option value="Intermedio" {% if receta.nivel_dificultad == 'Intermedio' %}selected{% endif %}>Intermedio</option>
+                            <option value="Difícil" {% if receta.nivel_dificultad == 'Difícil' %}selected{% endif %}>Difícil</option>
+                        </select>
+                        <br>
+
+                        <label for="imagen"><b>Imagen:</b></label>
+                        <input type="file" class="form-control" name="imagen" id="imagen" accept="image/*">
+                        <br>
+
+                        <label for="es_favorita"><b>Es Favorita:</b></label>
+                        <select class="form-control" name="es_favorita" id="es_favorita" required>
+                            <option value="True" {% if receta.es_favorita %}selected{% endif %}>Sí</option>
+                            <option value="False" {% if not receta.es_favorita %}selected{% endif %}>No</option>
+                        </select>
+                        <br>
+
+                        <label for="fecha_creacion"><b>Fecha de Creación:</b></label>
+                        <input type="date" class="form-control" name="fecha_creacion" id="fecha_creacion" value="{{ receta.fecha_creacion|date:'Y-m-d' }}" required>
+                        <br>
+
+                        <center>
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                            <a href="/listado_receta/" class="btn btn-danger">Cancelar</a>
+                        </center>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

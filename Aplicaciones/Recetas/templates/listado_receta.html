@@ -1,0 +1,97 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+{% load static %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 text-center">
+           <br> <h1 class="mb-4">Listado de Recetas</h1>
+            <a href="/crear_receta/" class="btn btn-primary mb-4">Agregar Receta</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered table-dark table-striped table-hover text-center"  id="tbl-recetas">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NOMBRE</th>
+                        <th>DESCRIPCION</th>
+                        <th>INGREDIENTES</th>
+                        <th>INSTRUCIONES</th>
+                        <th>TIEMPO DE PREPARACIÓN</th>
+                        <th>NIVEL DE DIFICULTAD</th>
+                        <th>IMAGEN</th>
+                        <th>ES FAVORITA</th>
+                        <th>FECHA DE CREACION</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for receta in recetas %}
+                        <tr>
+                            <td>{{ receta.id }}</td>
+                            <td>{{ receta.nombre }}</td>
+                            <td>{{ receta.descripcion }}</td>
+                            <td>{{ receta.ingredientes }}</td>
+                            <td>{{ receta.instrucciones }}</td>
+                            <td>{{ receta.tiempo_preparacion }} minutos</td>
+                            <td>{{ receta.nivel_dificultad }}</td>
+                            <td>
+                                {% if receta.imagen %}
+                                <a href="{{ receta.imagen.url }}">
+                                <img src="{{ receta.imagen.url }}" alt="Imagen de receta" height="100px" width="100px"></a>
+                                <br>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      Opciones
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                      <li><a class="dropdown-item" href="{{ receta.imagen.url }}" target="_blank">VER</a></li>
+                                      <li><a class="dropdown-item" href="{{ receta.imagen.url }}" download>DESCARGAR</a></li>
+                                    </ul>
+                                </div>
+                                {% endif %}
+                            </td>
+                            <td>{{ receta.es_favorita|yesno:"Sí,No" }}</td>
+                            <td>{{ receta.fecha_creacion }}</td>
+                            <td align="center">
+                                <a href="/editarreceta/{{ receta.id }}" class="btn btn-outline-warning btn-circle"> <i class="fas fa-pencil"></i></a>
+                                <a href="javascript: void(0)" onclick="eliminarReceta('/eliminar_receta/{{ receta.id }}');" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    let table = new DataTable('#tbl-recetas');
+</script>
+
+<script type="text/javascript">
+    function eliminarReceta(url) {
+        iziToast.question({
+            timeout: 15000,
+            close: true,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'CONFIRMACIÓN',
+            message: '¿Está seguro de eliminar la receta seleccionada?',
+            position: 'center',
+            buttons: [
+                ['<button><b>SI</b></button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = url;
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
+            ]
+        });
+    }
+</script>
+{% endblock %}

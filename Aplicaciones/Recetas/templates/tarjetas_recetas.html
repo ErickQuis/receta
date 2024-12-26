@@ -1,0 +1,111 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarjetas de Recetas</title>
+  <style>
+    .recipe-card {
+      display: flex;
+      align-items: flex-start;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-bottom: 16px;
+      max-width: 600px;
+      font-family: Arial, sans-serif;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .recipe-card:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .recipe-image img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .recipe-details {
+      flex: 1;
+      padding: 16px;
+    }
+
+    .recipe-details span {
+      color: #000; /* Cambiar el color del nombre a negro */
+    }
+
+    .recipe-details h4 {
+      font-size: 18px;
+      margin: 0 0 8px;
+      font-weight: bold;
+    }
+
+    .recipe-details p {
+      font-size: 14px;
+      color: #555;
+      margin: 0 0 8px;
+    }
+
+    .recipe-meta {
+      font-size: 14px;
+      color: #777;
+      display: flex;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .recipe-save {
+      padding: 16px;
+    }
+
+    .recipe-save button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #777;
+    }
+
+    .recipe-save button:hover {
+      color: #000;
+    }
+  </style>
+  <br></br><br></br><br></br>
+</head>
+<body>
+  <div class="container">
+    {% for receta in recetas %}
+    <a href="{% url 'detalle_receta' receta.id %}" class="recipe-card">
+      <div class="recipe-image">
+        {% if receta.imagen %}
+          <img src="{{ receta.imagen.url }}" alt="{{ receta.nombre }}">
+        {% else %}
+          <img src="https://via.placeholder.com/150" alt="Sin imagen">
+        {% endif %}
+      </div>
+      <div class="recipe-details">
+        <span>🥘 {{ receta.nombre }}</span>
+        <p>{{ receta.descripcion }}</p>
+        <div class="recipe-meta">
+          <span>⏱️ {{ receta.tiempo_preparacion }} min</span>
+          <span>👤 <b>DIFICULTAD:</b> {{ receta.nivel_dificultad }} </span>
+        </div>
+        <div class="recipe-favorita">
+          <span>👩‍🍳 <b>FAVORITA:</b>{{ receta.es_favorita|yesno:"Sí,No"  }}</span>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</body>
+</html>
+{% endblock %}
