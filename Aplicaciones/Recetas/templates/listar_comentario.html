@@ -8,13 +8,14 @@
 
            <div class="row">
             <div class="col-12">
-                <table class="table table-bordered table-dark table-striped table-hover text-center"  id="tbl-recetas">
+                <table class="table table-bordered table-dark table-striped table-hover text-center"  id="tbl-comentario">
                     <thead>
         <tr>
           <th>Autor</th>
           <th>Receta</th>
           <th>Contenido</th>
           <th>Fecha</th>
+          <th>ACCIONES</th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +25,9 @@
           <td>{{ comentario.receta.nombre }}</td>
           <td>{{ comentario.contenido }}</td>
           <td>{{ comentario.fecha|date:"d de F, Y H:i" }}</td>
+          <td align="center">
+            <a href="javascript: void(0)" onclick="eliminarcomentario('/eliminar_comentario/{{ comentario.id }}');" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+        </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -31,4 +35,33 @@
   </div>
 </body>
 </html>
+
+<script>
+    let table = new DataTable('#tbl-comentario');
+</script>
+
+<script type="text/javascript">
+    function eliminarcomentario(url) {
+        iziToast.question({
+            timeout: 15000,
+            close: true,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'CONFIRMACIÓN',
+            message: '¿Está seguro de eliminar el comentario seleccionada?',
+            position: 'center',
+            buttons: [
+                ['<button><b>SI</b></button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = url;
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
+            ]
+        });
+    }
+</script>
 {% endblock %}

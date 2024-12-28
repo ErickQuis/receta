@@ -152,6 +152,15 @@ def eliminar_receta(request, id):
     messages.success(request,"Receta Eliminada Correctamente")
     return redirect('/listado_receta')
 
+#######################################
+#Eliminar comentario
+def eliminar_comentario(request, id):
+    comentarioeliminar=Comentario.objects.get(id=id)
+    comentarioeliminar.delete()
+    messages.success(request,"Comentario Eliminado Correctamente")
+    return redirect('/listar_comentario')
+
+
 ##########################################################################
 #Guardar comentario
 def guardar_comentario(request):

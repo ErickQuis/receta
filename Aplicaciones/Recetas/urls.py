@@ -15,6 +15,7 @@ urlpatterns = [
     path('tarjetas_recetas/', views.tarjetas_recetas, name='tarjetas_recetas'),
     path('detalle_receta/<int:receta_id>/', views.detalle_receta, name='detalle_receta'),
     path('guardar_comentario/', views.guardar_comentario, name='guardar_comentario'),
+    path('eliminar_comentario/<int:id>/', views.eliminar_comentario, name='eliminar_comentario'),
 
  
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
