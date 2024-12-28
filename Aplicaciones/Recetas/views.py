@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Receta
+from .models import Receta, Comentario
 from django.db.models import Q
+from .forms import ComentarioForm
 
 
 
@@ -13,8 +14,34 @@ def inicio(request):
 def detalle_receta(request, receta_id):
     receta = get_object_or_404(Receta, id=receta_id)
     return render(request, 'detalle_receta.html', {'receta': receta})
-########################################
+############################################################
 
+def comentario_receta(request, receta_id):
+    receta = get_object_or_404(Receta, id=receta_id)
+    comentarios = Comentario.objects.filter(receta=receta).order_by('-fecha')  
+
+    if request.method == 'POST':
+        form = ComentarioForm(request.POST)
+        if form.is_valid():
+            comentario = form.save(commit=False)
+            comentario.receta = receta
+            comentario.save()
+            return redirect('comentarios', receta_id=receta.id)  
+
+    else:
+        form = ComentarioForm()
+
+    return render(request, 'comentarios.html', {
+        'receta': receta,
+        'comentarios': comentarios,
+        'form': form,
+    })
+
+
+
+
+####################################3
+#Tarejtas Receta
 def tarjetas_recetas(request):
     busqueda = request.POST.get("buscar")
     recetas = Receta.objects.all() 
@@ -88,6 +115,14 @@ def listado_receta(request):
     return render(request, 'listado_receta.html', {'recetas': recetasBdd})
 
 ################################
+#Listar comentario
+def listar_comentario(request):
+    comentariosBdd = Comentario.objects.all()
+
+    return render(request, 'listar_comentario.html', {'comentarios': comentariosBdd})
+
+##########################################################################
+
 # Editar recetas
 def editarreceta(request, id):
     receta = get_object_or_404(Receta, id=id)
@@ -118,4 +153,28 @@ def eliminar_receta(request, id):
     return redirect('/listado_receta')
 
 ##########################################################################
+#Guardar comentario
+def guardar_comentario(request):
+    if request.method == 'POST':
+        # Obteniendo los valores de los campos del formulario
+        autor = request.POST['txt_autor']
+        contenido = request.POST['contenido']
+        receta_id = request.POST.get('sel_receta')
 
+        #validar
+        receta = get_object_or_404(Receta, id=receta_id)
+
+
+         # Creando la nueva receta
+        nuevocomentario = Comentario.objects.create(
+            autor=autor,
+            contenido=contenido,
+            receta=receta
+
+        )
+
+        # Mensaje de éxito
+        messages.success(request, "Comenbtario agregada correctamente")
+        return redirect('tarjetas_recetas')
+
+#######################################################

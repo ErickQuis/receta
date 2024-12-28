@@ -20,3 +20,12 @@ class Receta(models.Model):
     imagen = models.ImageField(upload_to='recetas/', blank=True, null=True, verbose_name="Imagen de la receta")
     es_favorita = models.BooleanField(default=False, verbose_name="Es favorita")
     fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
+
+
+
+
+class Comentario(models.Model):
+    autor = models.CharField(max_length=100)  # Ahora es un campo de texto
+    receta = models.ForeignKey(Receta, on_delete=models.CASCADE, related_name='comentarios')
+    contenido = models.TextField()
+    fecha = models.DateTimeField(auto_now_add=True)

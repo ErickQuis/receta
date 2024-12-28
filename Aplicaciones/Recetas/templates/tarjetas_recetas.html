@@ -78,8 +78,26 @@
     .recipe-save button:hover {
       color: #000;
     }
+
+    .recipe-comments {
+      margin-top: 20px;
+      color: #000;
+    }
+
+    .comment-card {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background: #f9f9f9;
+    }
+
+    .comment-meta {
+      font-size: 12px;
+      color: #777;
+    }
   </style>
-  <br></br><br></br><br></br>
+  <br><br><br>
 </head>
 <body>
   <div class="container">
@@ -87,9 +105,9 @@
     <a href="{% url 'detalle_receta' receta.id %}" class="recipe-card">
       <div class="recipe-image">
         {% if receta.imagen %}
-          <img src="{{ receta.imagen.url }}" alt="{{ receta.nombre }}">
+        <img src="{{ receta.imagen.url }}" alt="{{ receta.nombre }}">
         {% else %}
-          <img src="https://via.placeholder.com/150" alt="Sin imagen">
+        <img src="https://via.placeholder.com/150" alt="Sin imagen">
         {% endif %}
       </div>
       <div class="recipe-details">
@@ -97,15 +115,68 @@
         <p>{{ receta.descripcion }}</p>
         <div class="recipe-meta">
           <span>⏱️ {{ receta.tiempo_preparacion }} min</span>
-          <span>👤 <b>DIFICULTAD:</b> {{ receta.nivel_dificultad }} </span>
+          <span>👤 <b>DIFICULTAD:</b> {{ receta.nivel_dificultad }}</span>
         </div>
         <div class="recipe-favorita">
-          <span>👩‍🍳 <b>FAVORITA:</b>{{ receta.es_favorita|yesno:"Sí,No"  }}</span>
+          <span>👩‍🍳 <b>FAVORITA:</b> {{ receta.es_favorita|yesno:"Sí,No" }}</span>
         </div>
       </div>
     </a>
     {% endfor %}
-  </div>
-</body>
-</html>
+
+        <div class="container">
+          <h4><b>Comentarios</b></h4>
+          <div class="container">
+            {% for receta in recetas %}
+            <a href="{% url 'detalle_receta' receta.id %}" class="recipe-card">
+              <div class="recipe-image">
+                {% if receta.imagen %}
+                <img src="{{ receta.imagen.url }}">
+                {% else %}
+                <img src="https://via.placeholder.com/150" alt="Sin imagen">
+                {% endif %}
+              </div>
+              <div class="recipe-comments">
+                <span>🥘 {{ receta.nombre }}</span>
+                {% for comentario in receta.comentarios.all %}
+                <div class="comment-card">
+                  <span>✍️ {{ comentario.autor }}</span>
+                  <p>👤 <b>Comentario:</b>{{ comentario.contenido }}</p>
+                  <div class="comment-meta">
+                    <span>📅 {{ comentario.fecha|date:"d de F, Y" }}</span>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+
+            </a>
+            
+            {% endfor %}
+          </div>
+
+          <h4><b>Deja tu comentario</b></h4>
+          <form method="post" action="/guardar_comentario/" class="mt-4">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="txt_autor" class="form-label">Nombre:</label>
+              <input type="text" class="form-control" id="txt_autor" name="txt_autor" required>
+            </div>
+            <div class="mb-3">
+              <label for="contenido" class="form-label">Comentario:</label>
+              <textarea class="form-control" id="contenido" name="contenido" rows="3" placeholder="Escribe tu comentario..." required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="sel_receta" class="form-label">Receta:</label>
+              <select class="form-control" id="sel_receta" name="sel_receta" required>
+                {% for receta in recetas %}
+                <option value="{{ receta.id }}">{{ receta.nombre }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Publicar Comentario</button>
+          </form>
+        </div>
+      </div>
+    </body>
+    </html>
 {% endblock %}
