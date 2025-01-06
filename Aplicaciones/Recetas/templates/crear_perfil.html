@@ -1,0 +1,116 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+{% load static %}
+<br>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h1 class="mb-4">Agregar Nuevo Perfil</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="/guardarperfil/" id="frm_nuevo_perfil" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Campo Nombre -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="txt_nombre" class="form-label"><b>Nombre:</b></label>
+                                <input type="text" class="form-control" name="txt_nombre" id="txt_nombre" placeholder="Ingrese el nombre del perfil" required>
+                            </div>
+                        </div>
+
+                        <!-- Campo Descripción -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="txt_descripcion" class="form-label"><b>Descripción:</b></label>
+                                <textarea class="form-control" name="txt_descripcion" id="txt_descripcion" rows="3" placeholder="Ingrese una descripción"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Campo Idioma -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="idioma" class="form-label"><b>Idioma:</b></label>
+                                <select class="form-control" name="idioma" id="idioma" required>
+                                    <option value="">Seleccionar</option>
+                                    <option value="Español">Español</option>
+                                    <option value="Ingles">Inglés</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Campo fecha de caducidad -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="txt_fecha_caducidad"><b>Fecha de Caducidad:</b></label>
+                                <input type="date" class="form-control" name="txt_fecha_caducidad" id="txt_fecha_caducidad">
+                            </div>
+                        </div>
+
+                        <!-- Campo Creador -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="txt_creador" class="form-label"><b>Creador:</b></label>
+                                <input type="text" class="form-control" name="txt_creador" id="txt_creador" placeholder="Ingrese el creador" required>
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                        <a href="/listado_perfil/" class="btn btn-danger btn-block">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#frm_nuevo_perfil").validate({
+        rules: {
+            txt_nombre: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            },
+            txt_descripcion: {
+                required: true,
+                minlength: 3,
+                maxlength: 100
+            },
+            txt_creador: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            },
+            idioma: {
+                required: true
+            }
+        },
+        messages: {
+            txt_nombre: {
+                required: "Por favor, ingrese el nombre del perfil.",
+                minlength: "El nombre debe tener al menos 3 caracteres.",
+                maxlength: "El nombre no debe superar los 50 caracteres."
+            },
+            txt_descripcion: {
+                required: "Por favor, ingrese una descripción.",
+                minlength: "La descripción debe tener al menos 3 caracteres.",
+                maxlength: "La descripción no debe superar los 100 caracteres."
+            },
+            txt_creador: {
+                required: "Por favor, ingrese el creador.",
+                minlength: "El nombre del creador debe tener al menos 3 caracteres.",
+                maxlength: "El nombre del creador no debe superar los 50 caracteres."
+            },
+            idioma: {
+                required: "Por favor, seleccione un idioma."
+            }
+        }
+    });
+</script>
+{% endblock %}

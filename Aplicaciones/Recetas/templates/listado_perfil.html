@@ -1,0 +1,74 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+{% load static %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 text-center">
+           <br> <h1 class="mb-4">Listado de Perfiles</h1>
+            <a href="/crear_perfil/" class="btn btn-primary mb-4">Agregar Perfil</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered table-dark table-striped table-hover text-center"  id="tbl-perfiles">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NOMBRE</th>
+                        <th>DESCRIPCION</th>
+                        <th>IDIOMA</th>
+                        <th>FECHA DE CADUCIDAD</th>
+                        <th>CREADOR</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for perfil in perfiles %}
+                        <tr>
+                            <td>{{ perfil.id }}</td>
+                            <td>{{ perfil.nombre }}</td>
+                            <td>{{ perfil.descripcion }}</td>
+                            <td>{{ perfil.idioma }}</td>
+                            <td>{{ perfil.fecha_caducidad }}</td>
+                            <td>{{ perfil.creador }}</td>
+                            <td align="center">
+                                <a href="/editarperfil/{{ perfil.id }}" class="btn btn-outline-warning btn-circle"> <i class="fas fa-pencil"></i></a>
+                                <a href="javascript: void(0)" onclick="eliminarPerfil('/eliminar_perfil/{{ perfil.id }}');" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    let table = new DataTable('#tbl-perfiles');
+</script>
+
+<script type="text/javascript">
+    function eliminarPerfil(url) {
+        iziToast.question({
+            timeout: 15000,
+            close: true,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'CONFIRMACIÓN',
+            message: '¿Está seguro de eliminar el perfil seleccionado?',
+            position: 'center',
+            buttons: [
+                ['<button><b>SI</b></button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = url;
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }],
+            ]
+        });
+    }
+</script>
+{% endblock %}

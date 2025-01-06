@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Receta, Comentario
+from .models import Receta, Comentario,Perfil
 from django.db.models import Q
 from .forms import ComentarioForm
 
@@ -187,3 +187,83 @@ def guardar_comentario(request):
         return redirect('tarjetas_recetas')
 
 #######################################################
+
+
+# Crear perfil
+def crear_perfil(request):
+    return render(request, 'crear_perfil.html')
+
+###############
+# Guardar perfil
+
+def guardar_perfil(request):
+    if request.method == 'POST':
+        # Obteniendo los valores de los campos del formulario
+        nombre = request.POST['txt_nombre']
+        descripcion = request.POST.get('txt_descripcion', '')  
+        idioma = request.POST['idioma']
+        fecha_caducidad = request.POST['txt_fecha_caducidad']
+        creador = request.POST['txt_creador']
+
+        
+
+        # Creando la nueva perfil
+        nuevoperfil = Perfil.objects.create(
+            nombre=nombre,
+            descripcion=descripcion,
+            idioma=idioma,
+            fecha_caducidad=fecha_caducidad,
+            creador=creador
+            
+        )
+
+        # Mensaje de éxito
+        messages.success(request, "Perfil agregado correctamente")
+        
+        # Redirigir a la lista de recetas
+        return redirect('/listado_perfil')
+
+######################################
+# listar perfil
+def listado_perfil(request):
+    busqueda = request.POST.get("buscar")
+    perfilBdd = Perfil.objects.all()
+
+    if busqueda:
+        perfilsBdd = Perfil.objects.filter(
+            Q(nombre__icontains=busqueda) |
+            Q(descripcion__icontains=busqueda) |
+            Q(idioma__icontains=busqueda) |
+            Q(creador__icontains=busqueda) 
+        ).distinct()
+
+    return render(request, 'listado_perfil.html', {'perfiles': perfilBdd})
+
+################################
+# Editar perfil
+def editarperfil(request, id):
+    perfil = get_object_or_404(Perfil, id=id)
+
+    if request.method == 'POST':
+        perfil.nombre=request.POST['txt_nombre']
+        perfil.descripcion=request.POST.get('txt_descripcion', '')
+        perfil.idioma=request.POST['idioma']
+        perfil.fecha_caducidad =request.POST['txt_fecha_caducidad']
+        perfil.creador=request.POST['txt_creador']
+        
+        
+        perfil.save()
+        messages.success(request, "Perfil editado correctamente")
+        return redirect('listado_perfil')  # Redirige después de guardar
+
+    return render(request, 'editarperfil.html', {'perfil': perfil})
+
+#######################################################################
+#Eliminar Recerta
+def eliminar_perfil(request, id):
+    perfileliminar=Perfil.objects.get(id=id)
+    perfileliminar.delete()
+    messages.success(request,"Perfil Eliminada Correctamente")
+    return redirect('/listado_perfil')
+
+#######################################

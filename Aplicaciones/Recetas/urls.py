@@ -17,6 +17,13 @@ urlpatterns = [
     path('guardar_comentario/', views.guardar_comentario, name='guardar_comentario'),
     path('eliminar_comentario/<int:id>/', views.eliminar_comentario, name='eliminar_comentario'),
 
+    ################################################
+    path('crear_perfil/', views.crear_perfil),
+    path('listado_perfil/', views.listado_perfil, name='listado_perfil'),
+    path('guardarperfil/', views.guardar_perfil, name='guardar_perfil'),
+    path('editarperfil/<int:id>/', views.editarperfil, name='editarperfil'),
+    path('eliminar_perfil/<int:id>/', views.eliminar_perfil, name='eliminar_perfil'),
+
  
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

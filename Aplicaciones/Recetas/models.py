@@ -25,7 +25,16 @@ class Receta(models.Model):
 
 
 class Comentario(models.Model):
-    autor = models.CharField(max_length=100)  # Ahora es un campo de texto
+    autor = models.CharField(max_length=100) 
     receta = models.ForeignKey(Receta, on_delete=models.CASCADE, related_name='comentarios')
     contenido = models.TextField()
     fecha = models.DateTimeField(auto_now_add=True)
+
+
+class Perfil(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=255)
+    descripcion=models.TextField()
+    idioma=models.CharField(max_length=50)
+    fecha_caducidad=models.DateField()
+    creador=models.CharField(max_length=255)
